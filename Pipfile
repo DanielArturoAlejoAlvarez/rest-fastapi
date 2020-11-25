@@ -8,6 +8,8 @@ verify_ssl = true
 [packages]
 fastapi = "*"
 uvicorn = "*"
+uvloop = "*"
+pydantic = "*"
 
 [requires]
 python_version = "3.7"
