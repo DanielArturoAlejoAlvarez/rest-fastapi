@@ -23,6 +23,10 @@ def create_city(city: City):
   db.append(city.dict())
   return db[-1]
 
+@app.put('/cities/{city_id}')
+def update_city(city_id: int, city: City):  
+  return {'city_id': city_id, **city.dict()}
+
 @app.delete('cities/{city_id}')
 def delete_city(city_id: int):
   db.pop(city_id-1)
