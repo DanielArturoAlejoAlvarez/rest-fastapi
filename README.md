@@ -10,7 +10,7 @@ Using pipenv preferably.
 
 ## Installation
 
-Using FastAPI, SQLAlchemy, SQLite, Uvicorn,etc preferably.
+Using FastAPI, Hypercorn,etc preferably.
 
 ## DataBase
 
@@ -18,7 +18,7 @@ Using SQLite3, PostgreSQL MySQL, MongoDB,etc.
 
 ## Apps
 
-Using Postman, Insomnia, Talend API Tester,etc.
+Using Swagger UI.
 
 ```html
 
@@ -33,7 +33,7 @@ pipenv shell $ pipenv python src/app.py
 
 Follow the following steps and you're good to go! Important:
 
-![alt text]()
+![alt text](https://i.stack.imgur.com/Jm4Fq.gif)
 
 ## Coding
 
@@ -43,27 +43,17 @@ Follow the following steps and you're good to go! Important:
 DATABASE_URI='mysql+pymysql://{}:{}@{}/{}'.format(DB_USER,DB_PASSWORD,DB_HOST,DB_NAME)
 ```
 
-### Authentication
 
-```python
-...
-
-...
-````
-
-### Middlewares
-
-```python
-...
-
-...
-```
 
 ### Models
 
 ```python
 ...
+from pydantic import BaseModel
 
+class City(BaseModel):
+  name: str
+  timezone: str
 ...
 ```
 
@@ -71,7 +61,36 @@ DATABASE_URI='mysql+pymysql://{}:{}@{}/{}'.format(DB_USER,DB_PASSWORD,DB_HOST,DB
 
 ```python
 ...
+@app.get('/cities')
+def get_cities():
+  results=[]
+  for city in db:
+    r=requests.get(f'http://worldtimeapi.org/api/timezone/{city["name"]}/{city["timezone"]}')
+    current_time=r.json()['datetime']
+    results.append({
+      'name': city["name"],
+      'timezone': city["timezone"],
+      'current_time': current_time
+    })
+  return results
 
+@app.get('/cities/{city_id}')
+def get_city(city_id: int):
+  return db[city_id-1]
+
+@app.post('/cities')
+def create_city(city: City):
+  db.append(city.dict())
+  return db[-1]
+
+@app.get('/cities/{city_id}')
+def get_city(city_id: int):
+  return db[city_id-1]
+
+@app.post('/cities')
+def create_city(city: City):
+  db.append(city.dict())
+  return db[-1]
 ```
 
 ## Contributing
