@@ -43,7 +43,24 @@ Follow the following steps and you're good to go! Important:
 DATABASE_URI='mysql+pymysql://{}:{}@{}/{}'.format(DB_USER,DB_PASSWORD,DB_HOST,DB_NAME)
 ```
 
+### APP
 
+```python
+from fastapi import FastAPI
+from models.City import *
+
+app=FastAPI()
+
+db=[]
+
+@app.get('/')
+def index():
+  return {
+    'msg': 'WELCOME TO FASTAPI'
+  }
+
+from controllers.CityController import *
+```
 
 ### Models
 
